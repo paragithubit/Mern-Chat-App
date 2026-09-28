@@ -6,11 +6,11 @@ const getCallOptions = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    // Find all chats where the logged-in user is a participant
+    // Find all chats where the logged-in user is a participant (to fetch group calls)
     const userChats = await Chat.find({ users: userId }).select("_id");
     const chatIds = userChats.map((chat) => chat._id);
 
-    // Fetch calls where the user is either the caller, receiver, or part of a group chat
+    // Fetch calls where user is caller, receiver, or participant of the group chat
     const calls = await Call.find({
       $or: [
         { caller: userId },
@@ -47,44 +47,50 @@ const getCallOptions = async (req, res) => {
   }
 };
 
-// Log a new call (Supports 1-on-1 and Group Calls)
+// Log a new call (Supports 1-on-1 and Group Calls with automatic group detection)
 const logCall = async (req, res) => {
   const { receiverId, chatId, isGroupCall, callType, callStatus } = req.body;
 
   try {
     const userId = req.user._id;
 
-    // Normalize call status to avoid schema validation errors
+    // Normalize call status to avoid schema validation errors (supports "missed", "completed", "rejected")
     const resolvedStatus = callStatus || "completed";
 
-    // 1. Group Call Logging
-    if (isGroupCall && chatId) {
-      const newCall = await Call.create({
-        caller: userId,
-        receiver: null,
-        chatId: chatId,
-        isGroupCall: true,
-        callType: callType || "video",
-        callStatus: resolvedStatus,
-      });
+    // Check if a chatId is provided
+    if (chatId) {
+      // Verify whether this chat is actually a group chat
+      const chat = await Chat.findById(chatId);
+      const isActuallyGroup = chat && (chat.isGroupChat || (chat.users && chat.users.length > 2));
 
-      const fullCall = await Call.findById(newCall._id)
-        .populate({
-          path: "caller",
-          select: "name email profilePicture phone",
-          strictPopulate: false,
-        })
-        .populate({
-          path: "chatId",
-          select: "chatName groupImage isGroupChat users",
-          populate: {
-            path: "users",
-            select: "name email profilePicture phone",
-          },
-          strictPopulate: false,
+      if (isGroupCall || isActuallyGroup) {
+        const newCall = await Call.create({
+          caller: userId,
+          receiver: null,
+          chatId: chatId,
+          isGroupCall: true,
+          callType: callType || "video",
+          callStatus: resolvedStatus,
         });
 
-      return res.status(201).json(fullCall);
+        const fullCall = await Call.findById(newCall._id)
+          .populate({
+            path: "caller",
+            select: "name email profilePicture phone",
+            strictPopulate: false,
+          })
+          .populate({
+            path: "chatId",
+            select: "chatName groupImage isGroupChat users",
+            populate: {
+              path: "users",
+              select: "name email profilePicture phone",
+            },
+            strictPopulate: false,
+          });
+
+        return res.status(201).json(fullCall);
+      }
     }
 
     // 2. 1-on-1 Call Logging (Incoming, Outgoing, or Missed)
@@ -136,7 +142,8 @@ const deleteCallLog = async (req, res) => {
       return res.status(404).json({ message: "Call log not found" });
     }
 
-    // Add user to deletedFor array if not already present
+    // Ensure deletedFor array exists and add user safely
+    call.deletedFor = call.deletedFor || [];
     if (!call.deletedFor.includes(userId)) {
       call.deletedFor.push(userId);
       await call.save();
