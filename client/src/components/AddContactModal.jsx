@@ -49,7 +49,7 @@ const AddContactModal = ({ isOpen, onClose, onContactAdded }) => {
       };
 
       await axios.post(
-        "http://localhost:7000/api/contacts/add",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/contacts/add",
         {
           savedName: cleanName,
           phoneNumber: cleanPhone,

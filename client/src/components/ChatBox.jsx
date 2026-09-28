@@ -180,7 +180,7 @@ const ChatBox = ({ activeTab }) => {
       if (!user?.token) return;
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const { data } = await axios.get("http://localhost:7000/api/contacts", config);
+        const { data } = await axios.get("https://chat-app-backend-1-ib4u.onrender.com/api/contacts", config);
         const map = new Map();
         (data || []).forEach((c) => {
           const uId = (c.contactUser?._id || c.contactUser)?.toString();
@@ -373,7 +373,7 @@ const ChatBox = ({ activeTab }) => {
   const handleDirectDownload = (fileUrl, fileName) => {
     if (!fileUrl) return;
 
-    const proxyDownloadUrl = `http://localhost:7000/api/message/download?url=${encodeURIComponent(
+    const proxyDownloadUrl = `https://chat-app-backend-1-ib4u.onrender.com/api/message/download?url=${encodeURIComponent(
       fileUrl,
     )}&filename=${encodeURIComponent(fileName || "download")}`;
 
@@ -392,7 +392,7 @@ const ChatBox = ({ activeTab }) => {
         headers: { Authorization: `Bearer ${user.token}` },
       };
       await axios.put(
-        `http://localhost:7000/api/message/read/${chatId}`,
+        `https://chat-app-backend-1-ib4u.onrender.com/api/message/read/${chatId}`,
         {},
         config,
       );
@@ -447,7 +447,7 @@ const ChatBox = ({ activeTab }) => {
         headers: { Authorization: `Bearer ${user.token}` },
       };
       const { data } = await axios.get(
-        `http://localhost:7000/api/message/${selectedChat._id}`,
+        `https://chat-app-backend-1-ib4u.onrender.com/api/message/${selectedChat._id}`,
         config,
       );
 
@@ -754,7 +754,7 @@ const ChatBox = ({ activeTab }) => {
       };
 
       await axios.post(
-        "http://localhost:7000/api/message",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/message",
         payload,
         config,
       );
@@ -796,7 +796,7 @@ const ChatBox = ({ activeTab }) => {
             },
           };
           const { data } = await axios.put(
-            `http://localhost:7000/api/message/edit/${editingMessage._id}`,
+            `https://chat-app-backend-1-ib4u.onrender.com/api/message/edit/${editingMessage._id}`,
             { newContent: newMessage.trim() },
             config,
           );
@@ -884,7 +884,7 @@ const ChatBox = ({ activeTab }) => {
         }, 50);
 
         const { data } = await axios.post(
-          "http://localhost:7000/api/message",
+          "https://chat-app-backend-1-ib4u.onrender.com/api/message",
           payload,
           config,
         );
@@ -935,7 +935,7 @@ const ChatBox = ({ activeTab }) => {
             replyTo: replyingTo ? replyingTo._id : undefined,
           };
           const { data } = await axios.post(
-            "http://localhost:7000/api/message",
+            "https://chat-app-backend-1-ib4u.onrender.com/api/message",
             payload,
             config,
           );
@@ -964,7 +964,7 @@ const ChatBox = ({ activeTab }) => {
         headers: { Authorization: `Bearer ${user.token}` },
       };
       const { data } = await axios.get(
-        "http://localhost:7000/api/contacts",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/contacts",
         config,
       );
       setSavedContactsList(data);
@@ -1002,7 +1002,7 @@ const ChatBox = ({ activeTab }) => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:7000/api/message",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/message",
         payload,
         config,
       );
@@ -1054,7 +1054,7 @@ const ChatBox = ({ activeTab }) => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:7000/api/message",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/message",
         payload,
         config,
       );
@@ -1090,7 +1090,7 @@ const ChatBox = ({ activeTab }) => {
       };
 
       const { data } = await axios.put(
-        "http://localhost:7000/api/message/vote",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/message/vote",
         { messageId, optionId },
         config,
       );
@@ -1167,7 +1167,7 @@ const ChatBox = ({ activeTab }) => {
         };
 
         const { data } = await axios.post(
-          "http://localhost:7000/api/message",
+          "https://chat-app-backend-1-ib4u.onrender.com/api/message",
           payload,
           config,
         );
@@ -1226,7 +1226,7 @@ const ChatBox = ({ activeTab }) => {
       };
 
       await axios.delete(
-        `http://localhost:7000/api/message/${deleteModalMessage._id}`,
+        `https://chat-app-backend-1-ib4u.onrender.com/api/message/${deleteModalMessage._id}`,
         config,
       );
 
@@ -1313,7 +1313,7 @@ const ChatBox = ({ activeTab }) => {
         },
       };
 
-      await axios.delete("http://localhost:7000/api/message/bulk-delete", {
+      await axios.delete("https://chat-app-backend-1-ib4u.onrender.com/api/message/bulk-delete", {
         headers: config.headers,
         data: { messageIds: selectedMessageIds, deleteType },
       });
@@ -1352,7 +1352,7 @@ const ChatBox = ({ activeTab }) => {
         headers: { Authorization: `Bearer ${user.token}` },
       };
       const { data } = await axios.put(
-        `http://localhost:7000/api/chat/favourite/${selectedChat._id}`,
+        `https://chat-app-backend-1-ib4u.onrender.com/api/chat/favourite/${selectedChat._id}`,
         {},
         config,
       );
@@ -1393,7 +1393,7 @@ const ChatBox = ({ activeTab }) => {
                   headers: { Authorization: `Bearer ${user.token}` },
                 };
                 await axios.put(
-                  `http://localhost:7000/api/message/clear/${selectedChat._id}`,
+                  `https://chat-app-backend-1-ib4u.onrender.com/api/message/clear/${selectedChat._id}`,
                   {},
                   config,
                 );
@@ -1449,7 +1449,7 @@ const ChatBox = ({ activeTab }) => {
                   headers: { Authorization: `Bearer ${user.token}` },
                 };
                 const chatId = selectedChat._id;
-                await axios.delete(`http://localhost:7000/api/chat/${chatId}`, config);
+                await axios.delete(`https://chat-app-backend-1-ib4u.onrender.com/api/chat/${chatId}`, config);
 
                 if (socket) {
                   socket.emit("delete chat", { chatId, users: selectedChat.users });
@@ -1494,7 +1494,7 @@ const ChatBox = ({ activeTab }) => {
                 const config = {
                   headers: { Authorization: `Bearer ${user.token}` },
                 };
-                await axios.delete("http://localhost:7000/api/users/delete", config);
+                await axios.delete("https://chat-app-backend-1-ib4u.onrender.com/api/users/delete", config);
                 localStorage.removeItem("userInfo");
                 setUser(null);
                 setSelectedChat(null);
@@ -1531,7 +1531,7 @@ const ChatBox = ({ activeTab }) => {
         },
       };
       const { data } = await axios.put(
-        `http://localhost:7000/api/message/react/${messageId}`,
+        `https://chat-app-backend-1-ib4u.onrender.com/api/message/react/${messageId}`,
         { emoji },
         config,
       );
@@ -1573,7 +1573,7 @@ const ChatBox = ({ activeTab }) => {
                   : { userIdToBlock: partnerId };
 
                 const { data } = await axios.put(
-                  `http://localhost:7000/api/user/${endpoint}`,
+                  `https://chat-app-backend-1-ib4u.onrender.com/api/user/${endpoint}`,
                   payload,
                   config,
                 );

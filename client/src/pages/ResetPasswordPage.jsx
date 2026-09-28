@@ -63,7 +63,7 @@ const ResetPasswordPage = () => {
       };
 
       const { data } = await axios.put(
-        `http://localhost:7000/api/auth/reset-password/${token}`,
+        `https://chat-app-backend-1-ib4u.onrender.com/api/auth/reset-password/${token}`,
         { password },
         config
       );

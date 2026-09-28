@@ -27,7 +27,7 @@ const ForgotPasswordPage = () => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:7000/api/auth/forgot-password",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/auth/forgot-password",
         { email },
         config
       );

@@ -21,7 +21,7 @@ const MediaDrawer = ({ isOpen, onClose, messages = [] }) => {
   const handleDirectDownload = (fileUrl, fileName) => {
     if (!fileUrl) return;
 
-    const proxyDownloadUrl = `http://localhost:7000/api/message/download?url=${encodeURIComponent(
+    const proxyDownloadUrl = `https://chat-app-backend-1-ib4u.onrender.com/api/message/download?url=${encodeURIComponent(
       fileUrl
     )}&filename=${encodeURIComponent(fileName || "document.pdf")}`;
 

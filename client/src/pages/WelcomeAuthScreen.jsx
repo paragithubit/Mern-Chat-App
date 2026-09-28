@@ -36,7 +36,7 @@ const WelcomeAuthScreen = () => {
 
     setLoading(true);
     try {
-      const { data } = await axios.post("http://localhost:7000/api/otp/send-otp", {
+      const { data } = await axios.post("https://chat-app-backend-1-ib4u.onrender.com/api/otp/send-otp", {
         phone: cleanPhone,
         phoneNumber: cleanPhone,
       });
@@ -72,7 +72,7 @@ const WelcomeAuthScreen = () => {
 
     setLoading(true);
     try {
-      const { data } = await axios.post("http://localhost:7000/api/otp/verify-otp", {
+      const { data } = await axios.post("https://chat-app-backend-1-ib4u.onrender.com/api/otp/verify-otp", {
         phone: phone,
         phoneNumber: phone,
         otp: cleanOtp,
@@ -120,7 +120,7 @@ const WelcomeAuthScreen = () => {
     setLoading(true);
 
     try {
-      const { data } = await axios.get("http://localhost:7000/api/auth/google-accounts");
+      const { data } = await axios.get("https://chat-app-backend-1-ib4u.onrender.com/api/auth/google-accounts");
       setGoogleAccounts(data || []);
       setStep(4);
     } catch (err) {
@@ -174,7 +174,7 @@ const WelcomeAuthScreen = () => {
           }
         : { email: cleanEmail, password: cleanPassword };
 
-      const { data } = await axios.post(`http://localhost:7000/api/auth/${endpoint}`, payload);
+      const { data } = await axios.post(`https://chat-app-backend-1-ib4u.onrender.com/api/auth/${endpoint}`, payload);
 
       // Tab isolation: write strictly to sessionStorage
       sessionStorage.setItem("userInfo", JSON.stringify(data));
@@ -203,7 +203,7 @@ const WelcomeAuthScreen = () => {
 
     setLoading(true);
     try {
-      const { data } = await axios.post("http://localhost:7000/api/auth/forgot-password", {
+      const { data } = await axios.post("https://chat-app-backend-1-ib4u.onrender.com/api/auth/forgot-password", {
         email: cleanEmail,
       });
       setSuccessMsg(data.message || "Password reset link sent! Check your email inbox.");

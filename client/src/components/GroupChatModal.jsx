@@ -28,7 +28,7 @@ const GroupChatModal = ({ isOpen, onClose }) => {
         headers: { Authorization: `Bearer ${user.token}` },
       };
       const { data } = await axios.get(
-        `http://localhost:7000/api/contacts?search=${encodeURIComponent(query.trim())}`,
+        `https://chat-app-backend-1-ib4u.onrender.com/api/contacts?search=${encodeURIComponent(query.trim())}`,
         config
       );
       setSearchResult(data);
@@ -76,7 +76,7 @@ const GroupChatModal = ({ isOpen, onClose }) => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:7000/api/chat/group",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/chat/group",
         {
           name: groupChatName.trim(),
           users: JSON.stringify(selectedUsers.map((u) => u._id)),

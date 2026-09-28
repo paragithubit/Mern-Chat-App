@@ -92,7 +92,7 @@ const ChatInfoDrawer = ({
       };
 
       const { data } = await axios.put(
-        "http://localhost:7000/api/chat/grouppicture",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/chat/grouppicture",
         {
           chatId: selectedChat._id,
           groupImage: uploadedUrl,
@@ -123,7 +123,7 @@ const ChatInfoDrawer = ({
       };
 
       const { data } = await axios.put(
-        "http://localhost:7000/api/chat/disappearing",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/chat/disappearing",
         { chatId: selectedChat._id, duration: durationInSeconds },
         config
       );

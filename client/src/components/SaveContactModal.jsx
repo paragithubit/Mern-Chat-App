@@ -27,7 +27,7 @@ const SaveContactModal = ({ isOpen, onClose, contactData }) => {
           headers: { Authorization: `Bearer ${user.token}` },
         };
         // Fetch user's current saved contacts list
-        const { data } = await axios.get("http://localhost:7000/api/contacts", config);
+        const { data } = await axios.get("https://chat-app-backend-1-ib4u.onrender.com/api/contacts", config);
 
         // Check if the phone number already exists in saved contacts (comparing last 10 digits to be safe)
         const last10Target = cleanPhone.slice(-10);
@@ -65,7 +65,7 @@ const SaveContactModal = ({ isOpen, onClose, contactData }) => {
       };
 
       await axios.post(
-        "http://localhost:7000/api/contacts/add",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/contacts/add",
         {
           savedName: contactName.trim(),
           phoneNumber: cleanPhone,

@@ -27,7 +27,7 @@ const CallsList = () => {
       if (!user?.token) return;
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const { data } = await axios.get("http://localhost:7000/api/contacts", config);
+        const { data } = await axios.get("https://chat-app-backend-1-ib4u.onrender.com/api/contacts", config);
         const map = new Map();
         (data || []).forEach((c) => {
           const uId = (c.contactUser?._id || c.contactUser)?.toString();
@@ -47,7 +47,7 @@ const CallsList = () => {
     if (!user?.token) return;
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.get("http://localhost:7000/api/calls", config);
+      const { data } = await axios.get("https://chat-app-backend-1-ib4u.onrender.com/api/calls", config);
       setCalls(data || []);
     } catch (error) {
       console.error("Failed to fetch call logs", error);
@@ -175,7 +175,7 @@ const CallsList = () => {
     setActiveMenuCallId(null);
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      await axios.delete(`http://localhost:7000/api/calls/${callId}`, config);
+      await axios.delete(`https://chat-app-backend-1-ib4u.onrender.com/api/calls/${callId}`, config);
       setCalls((prevCalls) => prevCalls.filter((c) => c._id !== callId));
       toast.success("Call log deleted");
     } catch (error) {
@@ -199,7 +199,7 @@ const CallsList = () => {
                 toast.dismiss(t.id);
                 try {
                   const config = { headers: { Authorization: `Bearer ${user.token}` } };
-                  await axios.delete("http://localhost:7000/api/calls/clear", config);
+                  await axios.delete("https://chat-app-backend-1-ib4u.onrender.com/api/calls/clear", config);
                   setCalls([]);
                   toast.success("Call history cleared successfully");
                 } catch (error) {

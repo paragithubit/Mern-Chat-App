@@ -67,7 +67,7 @@ const MyChats = ({
       };
 
       const { data } = await axios.get(
-        "http://localhost:7000/api/contacts",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/contacts",
         config
       );
 
@@ -278,7 +278,7 @@ const MyChats = ({
       };
 
       const { data } = await axios.get(
-        "http://localhost:7000/api/chat",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/chat",
         config
       );
 
@@ -431,7 +431,7 @@ const MyChats = ({
                   };
 
                   await axios.delete(
-                    `http://localhost:7000/api/chat/clear/${chatId}`,
+                    `https://chat-app-backend-1-ib4u.onrender.com/api/chat/clear/${chatId}`,
                     config
                   );
 
@@ -522,7 +522,7 @@ const MyChats = ({
                   };
 
                   await axios.delete(
-                    `http://localhost:7000/api/chat/${chatId}`,
+                    `https://chat-app-backend-1-ib4u.onrender.com/api/chat/${chatId}`,
                     config
                   );
 
@@ -613,7 +613,7 @@ const MyChats = ({
 
         const { data } =
           await axios.put(
-            "http://localhost:7000/api/auth/profile",
+            "https://chat-app-backend-1-ib4u.onrender.com/api/auth/profile",
             {
               profilePicture:
                 base64Image,
@@ -679,7 +679,7 @@ const MyChats = ({
 
       const { data } =
         await axios.get(
-          `http://localhost:7000/api/contacts?search=${encodeURIComponent(
+          `https://chat-app-backend-1-ib4u.onrender.com/api/contacts?search=${encodeURIComponent(
             query.trim()
           )}`,
           config
@@ -739,7 +739,7 @@ const MyChats = ({
 
       const { data } =
         await axios.post(
-          "http://localhost:7000/api/chat",
+          "https://chat-app-backend-1-ib4u.onrender.com/api/chat",
           { userId },
           config
         );
@@ -820,7 +820,7 @@ const MyChats = ({
         };
 
         await axios.put(
-          `http://localhost:7000/api/message/read/${chat._id}`,
+          `https://chat-app-backend-1-ib4u.onrender.com/api/message/read/${chat._id}`,
           {},
           config
         );

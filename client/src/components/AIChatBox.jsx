@@ -80,7 +80,7 @@ const AIChatBox = ({ fetchAgain, setFetchAgain, onOpenDrawer }) => {
       };
 
       const { data } = await axios.get(
-        `http://localhost:7000/api/message/${selectedChat._id}`,
+        `https://chat-app-backend-1-ib4u.onrender.com/api/message/${selectedChat._id}`,
         config
       );
       // Filter out deleted messages permanently so they never reappear after reload
@@ -201,7 +201,7 @@ const AIChatBox = ({ fetchAgain, setFetchAgain, onOpenDrawer }) => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:7000/api/ai/chat",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/ai/chat",
         {
           content: textToSend,
           chatId: selectedChat._id,
@@ -323,7 +323,7 @@ const AIChatBox = ({ fetchAgain, setFetchAgain, onOpenDrawer }) => {
         data: { deleteType: "forEveryone" },
       };
 
-      await axios.delete(`http://localhost:7000/api/message/${messageId}`, config);
+      await axios.delete(`https://chat-app-backend-1-ib4u.onrender.com/api/message/${messageId}`, config);
       const remaining = messages.filter((m) => m._id !== messageId);
       setMessages(remaining);
       setActiveMenuId(null);
@@ -358,9 +358,9 @@ const AIChatBox = ({ fetchAgain, setFetchAgain, onOpenDrawer }) => {
       };
 
       try {
-        await axios.delete(`http://localhost:7000/api/chat/clear/${targetChatId}`, config);
+        await axios.delete(`https://chat-app-backend-1-ib4u.onrender.com/api/chat/clear/${targetChatId}`, config);
       } catch (err) {
-        await axios.put(`http://localhost:7000/api/message/clear/${targetChatId}`, {}, config);
+        await axios.put(`https://chat-app-backend-1-ib4u.onrender.com/api/message/clear/${targetChatId}`, {}, config);
       }
 
       setMessages([]);

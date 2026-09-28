@@ -41,7 +41,7 @@ const AuthPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         };
         await axios.put(
-          "http://localhost:7000/api/user/update-public-key",
+          "https://chat-app-backend-1-ib4u.onrender.com/api/user/update-public-key",
           { publicKey: exportedPub },
           config
         );
@@ -65,7 +65,7 @@ const AuthPage = () => {
     setLoading(true);
 
     try {
-      await axios.post("http://localhost:7000/api/auth/send-otp", {
+      await axios.post("https://chat-app-backend-1-ib4u.onrender.com/api/auth/send-otp", {
         phone: cleanPhone,
       });
       
@@ -98,7 +98,7 @@ const AuthPage = () => {
       const cleanPhone = phone.trim().replace(/\D/g, "").slice(-10);
 
       const { data } = await axios.post(
-        "http://localhost:7000/api/auth/verify-otp",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/auth/verify-otp",
         {
           phone: cleanPhone,
           otp: cleanOtp,

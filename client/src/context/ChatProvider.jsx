@@ -9,7 +9,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import io from "socket.io-client";
 
 export const ChatContext = createContext();
-const ENDPOINT = "http://localhost:7000";
+const ENDPOINT = "https://chat-app-backend-1-ib4u.onrender.com";
 
 export const ChatProvider = ({ children }) => {
   const [user, setUser] = useState(null);

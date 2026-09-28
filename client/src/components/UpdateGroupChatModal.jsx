@@ -69,7 +69,7 @@ const UpdateGroupChatModal = ({ isOpen, onClose, fetchMessages }) => {
       };
 
       const { data } = await axios.put(
-        "http://localhost:7000/api/chat/grouppicture",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/chat/grouppicture",
         {
           chatId: selectedChat._id,
           groupImage: uploadedUrl,
@@ -102,7 +102,7 @@ const UpdateGroupChatModal = ({ isOpen, onClose, fetchMessages }) => {
       };
 
       const { data } = await axios.put(
-        "http://localhost:7000/api/chat/rename",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/chat/rename",
         {
           chatId: selectedChat._id,
           chatName: groupChatName,
@@ -135,7 +135,7 @@ const UpdateGroupChatModal = ({ isOpen, onClose, fetchMessages }) => {
         headers: { Authorization: `Bearer ${user.token}` },
       };
       const { data } = await axios.get(
-        `http://localhost:7000/api/user?search=${query}`,
+        `https://chat-app-backend-1-ib4u.onrender.com/api/user?search=${query}`,
         config
       );
       setSearchResult(data);
@@ -168,7 +168,7 @@ const UpdateGroupChatModal = ({ isOpen, onClose, fetchMessages }) => {
       };
 
       const { data } = await axios.put(
-        "http://localhost:7000/api/chat/groupadd",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/chat/groupadd",
         {
           chatId: selectedChat._id,
           userId: userToAdd._id,
@@ -205,7 +205,7 @@ const UpdateGroupChatModal = ({ isOpen, onClose, fetchMessages }) => {
       };
 
       const { data } = await axios.put(
-        "http://localhost:7000/api/chat/groupremove",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/chat/groupremove",
         {
           chatId: selectedChat._id,
           userId: userToRemove._id,
@@ -248,7 +248,7 @@ const UpdateGroupChatModal = ({ isOpen, onClose, fetchMessages }) => {
       };
 
       const { data } = await axios.put(
-        "http://localhost:7000/api/chat/groupadmin",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/chat/groupadmin",
         {
           chatId: selectedChat._id,
           targetUserId: targetUser._id,

@@ -58,7 +58,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
       };
 
       const { data } = await axios.put(
-        "http://localhost:7000/api/auth/profile",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/auth/profile",
         {
           name,
           bio,

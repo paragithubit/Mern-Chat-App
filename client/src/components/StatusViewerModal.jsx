@@ -31,7 +31,7 @@ const StatusViewerModal = ({ isOpen, onClose, statusGroup }) => {
     const markViewed = async () => {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        await axios.put(`http://localhost:7000/api/status/${currentStatus._id}/view`, {}, config);
+        await axios.put(`https://chat-app-backend-1-ib4u.onrender.com/api/status/${currentStatus._id}/view`, {}, config);
       } catch (err) {
         console.error("Failed to mark status as viewed", err);
       }
@@ -71,7 +71,7 @@ const StatusViewerModal = ({ isOpen, onClose, statusGroup }) => {
       // 1. Access or create direct chat with status author
       const authorId = statusGroup.user?._id || statusGroup.user;
       const { data: chatData } = await axios.post(
-        "http://localhost:7000/api/chat",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/chat",
         { userId: authorId },
         config
       );
@@ -83,7 +83,7 @@ const StatusViewerModal = ({ isOpen, onClose, statusGroup }) => {
       };
 
       const { data: messageData } = await axios.post(
-        "http://localhost:7000/api/message",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/message",
         payload,
         config
       );

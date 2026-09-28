@@ -27,7 +27,7 @@ const StatusList = () => {
   const fetchStatuses = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.get("http://localhost:7000/api/status", config);
+      const { data } = await axios.get("https://chat-app-backend-1-ib4u.onrender.com/api/status", config);
       setStatuses(data);
     } catch (error) {
       console.error("Failed to fetch statuses", error);
@@ -55,7 +55,7 @@ const StatusList = () => {
 
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       await axios.post(
-        "http://localhost:7000/api/status",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/status",
         { mediaUrl: res.data.secure_url, mediaType: "image" },
         config
       );
@@ -100,7 +100,7 @@ const StatusList = () => {
         updated[item._id] = true;
         try {
           const config = { headers: { Authorization: `Bearer ${user.token}` } };
-          await axios.put(`http://localhost:7000/api/status/${item._id}/view`, {}, config);
+          await axios.put(`https://chat-app-backend-1-ib4u.onrender.com/api/status/${item._id}/view`, {}, config);
         } catch (err) {
           console.error("Failed to sync view status on server", err);
         }

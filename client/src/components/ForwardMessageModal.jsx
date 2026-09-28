@@ -30,7 +30,7 @@ const ForwardMessageModal = ({ isOpen, onClose, onForward }) => {
         headers: { Authorization: `Bearer ${user.token}` },
       };
       const { data } = await axios.get(
-        "http://localhost:7000/api/users/directory",
+        "https://chat-app-backend-1-ib4u.onrender.com/api/users/directory",
         config
       );
       setSavedContactsList(data);
@@ -93,7 +93,7 @@ const ForwardMessageModal = ({ isOpen, onClose, onForward }) => {
           } else {
             try {
               const { data: newSelfChat } = await axios.post(
-                "http://localhost:7000/api/chat",
+                "https://chat-app-backend-1-ib4u.onrender.com/api/chat",
                 { userId: currentUserId },
                 config
               );
@@ -109,7 +109,7 @@ const ForwardMessageModal = ({ isOpen, onClose, onForward }) => {
           const userId = targetKey.replace("user_", "");
           try {
             const { data: newChat } = await axios.post(
-              "http://localhost:7000/api/chat",
+              "https://chat-app-backend-1-ib4u.onrender.com/api/chat",
               { userId },
               config
             );

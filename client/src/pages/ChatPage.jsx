@@ -37,7 +37,7 @@ const ChatPage = () => {
     if (!user?.token) return;
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.get("http://localhost:7000/api/status", config);
+      const { data } = await axios.get("https://chat-app-backend-1-ib4u.onrender.com/api/status", config);
       setStatuses(data);
     } catch (error) {
       console.error("Failed to fetch statuses", error);
@@ -74,7 +74,7 @@ const ChatPage = () => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get("http://localhost:7000/api/ai/room", config);
+      const { data } = await axios.get("https://chat-app-backend-1-ib4u.onrender.com/api/ai/room", config);
       
       if (!chats.find((c) => c._id === data._id)) {
         setChats([data, ...chats]);
