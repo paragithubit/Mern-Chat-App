@@ -1934,16 +1934,16 @@ const ChatBox = ({ activeTab }) => {
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 flex-shrink-0 relative">
+            <div className="flex items-center gap-1 flex-shrink-0 relative">
               {!isSelfChat && (
-                <div className="flex items-center gap-1.5 mr-2">
+                <div className="flex items-center gap-1 mr-1">
                   <button
                     type="button"
                     onClick={() => {
                       setCallType("audio");
                       setCallModalOpen(true);
                     }}
-                    className={`p-2.5 rounded-xl transition text-base cursor-pointer ${
+                    className={`p-2 rounded-xl transition text-base cursor-pointer ${
                       isDark
                         ? "hover:bg-[#374248] text-slate-300"
                         : "hover:bg-slate-200 text-slate-700"
@@ -1958,7 +1958,7 @@ const ChatBox = ({ activeTab }) => {
                       setCallType("video");
                       setCallModalOpen(true);
                     }}
-                    className={`p-2.5 rounded-xl transition text-base cursor-pointer ${
+                    className={`p-2 rounded-xl transition text-base cursor-pointer ${
                       isDark
                         ? "hover:bg-[#374248] text-slate-300"
                         : "hover:bg-slate-200 text-slate-700"
@@ -1973,7 +1973,7 @@ const ChatBox = ({ activeTab }) => {
               <button
                 onClick={() => setSearchOpen((prev) => !prev)}
                 title="Search in chat"
-                className={`p-2.5 rounded-xl transition text-base cursor-pointer ${
+                className={`p-2 rounded-xl transition text-base cursor-pointer ${
                   searchOpen
                     ? "bg-[#00a884] text-white"
                     : isDark
@@ -1987,7 +1987,7 @@ const ChatBox = ({ activeTab }) => {
               <button
                 onClick={() => setMediaDrawerOpen(true)}
                 title="Shared Media & Docs"
-                className={`text-sm px-3.5 py-2 rounded-xl transition font-medium flex items-center gap-1.5 cursor-pointer ${
+                className={`hidden sm:flex text-sm px-3 py-2 rounded-xl transition font-medium items-center gap-1.5 cursor-pointer ${
                   isDark
                     ? "hover:bg-[#374248] text-slate-300"
                     : "hover:bg-slate-200 text-slate-700"
@@ -1999,7 +1999,7 @@ const ChatBox = ({ activeTab }) => {
               {selectedChat.isGroupChat && (
                 <button
                   onClick={() => setGroupModalOpen(true)}
-                  className={`text-sm px-3.5 py-2 rounded-xl transition font-medium cursor-pointer ${
+                  className={`hidden md:flex text-sm px-3 py-2 rounded-xl transition font-medium cursor-pointer items-center gap-1 ${
                     isDark
                       ? "hover:bg-[#374248] text-slate-300"
                       : "hover:bg-slate-200 text-slate-700"
@@ -2012,7 +2012,7 @@ const ChatBox = ({ activeTab }) => {
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setMenuOpen((prev) => !prev)}
-                  className={`p-2.5 rounded-xl transition text-lg font-bold cursor-pointer ${
+                  className={`p-2 rounded-xl transition text-lg font-bold cursor-pointer ${
                     isDark
                       ? "hover:bg-[#374248] text-slate-300"
                       : "hover:bg-slate-200 text-slate-700"
@@ -2673,8 +2673,8 @@ const ChatBox = ({ activeTab }) => {
                           ref={contextMenuRef}
                           className={`absolute z-50 top-0 flex flex-col gap-2 select-none animate-in fade-in zoom-in-95 duration-150 ${
                             isMe
-                              ? "right-full mr-3 items-end"
-                              : "left-full ml-3 items-start"
+                              ? "right-0 sm:right-full sm:mr-3 items-end"
+                              : "left-0 sm:left-full sm:ml-3 items-start"
                           }`}
                         >
                           {!m.isDeleted && (
@@ -3434,7 +3434,10 @@ const ChatBox = ({ activeTab }) => {
 
                     <button
                       type="button"
-                      onClick={() => cameraInputRef.current?.click()}
+                      onClick={() => {
+                        cameraInputRef.current?.click();
+                        setAttachmentMenuOpen(false);
+                      }}
                       className="flex flex-col items-center gap-1.5 group cursor-pointer"
                     >
                       <div className="w-12 h-12 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-lg group-hover:scale-110 transition-all">

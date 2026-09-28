@@ -18,7 +18,7 @@ const CallsList = () => {
   const [savedContactsMap, setSavedContactsMap] = useState(new Map());
 
   const menuRef = useRef(null);
-  const { user, theme } = useChatState();
+  const { user, socket, theme } = useChatState();
   const isDark = theme === "dark";
 
   // Fetch saved contacts to resolve real names/phones like WhatsApp
@@ -60,6 +60,27 @@ const CallsList = () => {
     }
   }, [user?.token]);
 
+  // Real-time socket listener to update call history instantly (including missed calls)
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleCallUpdate = () => {
+      fetchCalls();
+    };
+
+    socket.on("callAccepted", handleCallUpdate);
+    socket.on("callEnded", handleCallUpdate);
+    socket.on("incomingCall", handleCallUpdate);
+    socket.on("callLogUpdated", handleCallUpdate);
+
+    return () => {
+      socket.off("callAccepted", handleCallUpdate);
+      socket.off("callEnded", handleCallUpdate);
+      socket.off("incomingCall", handleCallUpdate);
+      socket.off("callLogUpdated", handleCallUpdate);
+    };
+  }, [socket, user?.token]);
+
   // Close context menu on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -70,6 +91,16 @@ const CallsList = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Strict WhatsApp-style group call detector
+  const checkIfGroupCall = (call) => {
+    return Boolean(
+      call.isGroupCall || 
+      call.chatId?.isGroupChat === true || 
+      (call.chatId && call.chatId.users && call.chatId.users.length > 2) ||
+      (call.chatId && call.chatId.chatName && call.chatId.chatName !== "sender" && !call.receiver)
+    );
+  };
 
   // Helper to determine the target peer for a 1-on-1 call
   const getCallPartner = (call) => {
@@ -85,7 +116,7 @@ const CallsList = () => {
     return callerId === myId ? call.receiver : call.caller;
   };
 
-  // Resolve display name for the call item
+  // Resolve display name strictly favoring Group Name for group calls
   const getCallDisplayName = (call, isGroup) => {
     if (isGroup) {
       return call.chatId?.chatName && call.chatId?.chatName !== "sender"
@@ -114,12 +145,7 @@ const CallsList = () => {
   };
 
   const handleCallback = (call, type) => {
-    const isGroup = Boolean(
-      call.isGroupCall || 
-      call.chatId?.isGroupChat || 
-      (call.chatId && call.chatId.users && call.chatId.users.length > 2) ||
-      (call.chatId && call.chatId.chatName && call.chatId.chatName !== "sender" && !call.receiver)
-    );
+    const isGroup = checkIfGroupCall(call);
 
     if (isGroup) {
       setTargetChatId(call.chatId?._id || call.chatId);
@@ -140,7 +166,7 @@ const CallsList = () => {
       setTargetGroupUsers([]);
       setTargetGroupName("");
     }
-    setCallType(type || "audio");
+    setCallType(type || call.callType || "audio");
     setCallModalOpen(true);
   };
 
@@ -200,12 +226,7 @@ const CallsList = () => {
 
   const filteredCalls = calls.filter((call) => {
     const query = searchQuery.toLowerCase();
-    const isGroup = Boolean(
-      call.isGroupCall || 
-      call.chatId?.isGroupChat || 
-      (call.chatId && call.chatId.users && call.chatId.users.length > 2) ||
-      (call.chatId && call.chatId.chatName && call.chatId.chatName !== "sender" && !call.receiver)
-    );
+    const isGroup = checkIfGroupCall(call);
     const displayName = getCallDisplayName(call, isGroup).toLowerCase();
     const partner = !isGroup ? getCallPartner(call) : null;
     const phone = partner?.phone || "";
@@ -286,22 +307,16 @@ const CallsList = () => {
           </div>
         ) : (
           filteredCalls.map((call) => {
-            const isGroup = Boolean(
-              call.isGroupCall || 
-              call.chatId?.isGroupChat || 
-              (call.chatId && call.chatId.users && call.chatId.users.length > 2) ||
-              (call.chatId && call.chatId.chatName && call.chatId.chatName !== "sender" && !call.receiver)
-            );
+            const isGroup = checkIfGroupCall(call);
             const myId = (user?._id || user?.id)?.toString();
             const callerId = (call.caller?._id || call.caller?.id || call.caller)?.toString();
             const isCaller = callerId === myId;
             const targetUser = !isGroup ? getCallPartner(call) : null;
             const displayName = getCallDisplayName(call, isGroup);
 
-            // Robust check for missed calls: matches "missed" status or unacknowledged incoming calls
             const isMissed = call.callStatus === "missed" || call.status === "missed";
             const displayStatus =
-              isMissed && !isCaller
+              isMissed
                 ? "Missed"
                 : isCaller
                 ? "Outgoing"
@@ -387,7 +402,7 @@ const CallsList = () => {
                     className="p-2.5 bg-teal-500/10 hover:bg-teal-500 text-teal-400 hover:text-white rounded-xl transition-all text-xs cursor-pointer shadow-xs transform active:scale-95 flex items-center justify-center"
                     title="Call back"
                   >
-                    📞
+                    {call.callType === "video" ? "📹" : "📞"}
                   </button>
 
                   <button
@@ -439,6 +454,7 @@ const CallsList = () => {
             setIsGroupCallTarget(false);
             setTargetGroupUsers([]);
             setTargetGroupName("");
+            fetchCalls();
           }}
           callType={callType}
           isIncoming={false}
