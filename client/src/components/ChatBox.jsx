@@ -1749,7 +1749,6 @@ const ChatBox = ({ activeTab }) => {
     };
   };
 
-  // CORRECTED: Evaluate activeTab === "calls" first so clicking Calls tab always displays history
   if (activeTab === "calls") {
     return <CallsList />;
   }
