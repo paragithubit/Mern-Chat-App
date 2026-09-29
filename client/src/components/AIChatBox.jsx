@@ -3,6 +3,9 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useChatState } from "../context/useChatState";
 
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com/api";
+
 const AIChatBox = ({ fetchAgain, setFetchAgain, onOpenDrawer }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -80,7 +83,7 @@ const AIChatBox = ({ fetchAgain, setFetchAgain, onOpenDrawer }) => {
       };
 
       const { data } = await axios.get(
-        `https://chat-app-backend-1-ib4u.onrender.com/api/message/${selectedChat._id}`,
+        `${API_URL}/message/${selectedChat._id}`,
         config
       );
       // Filter out deleted messages permanently so they never reappear after reload
@@ -201,7 +204,7 @@ const AIChatBox = ({ fetchAgain, setFetchAgain, onOpenDrawer }) => {
       };
 
       const { data } = await axios.post(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/ai/chat",
+        `${API_URL}/ai/chat`,
         {
           content: textToSend,
           chatId: selectedChat._id,
@@ -323,7 +326,7 @@ const AIChatBox = ({ fetchAgain, setFetchAgain, onOpenDrawer }) => {
         data: { deleteType: "forEveryone" },
       };
 
-      await axios.delete(`https://chat-app-backend-1-ib4u.onrender.com/api/message/${messageId}`, config);
+      await axios.delete(`${API_URL}/message/${messageId}`, config);
       const remaining = messages.filter((m) => m._id !== messageId);
       setMessages(remaining);
       setActiveMenuId(null);
@@ -358,9 +361,9 @@ const AIChatBox = ({ fetchAgain, setFetchAgain, onOpenDrawer }) => {
       };
 
       try {
-        await axios.delete(`https://chat-app-backend-1-ib4u.onrender.com/api/chat/clear/${targetChatId}`, config);
+        await axios.delete(`${API_URL}/chat/clear/${targetChatId}`, config);
       } catch (err) {
-        await axios.put(`https://chat-app-backend-1-ib4u.onrender.com/api/message/clear/${targetChatId}`, {}, config);
+        await axios.put(`${API_URL}/message/clear/${targetChatId}`, {}, config);
       }
 
       setMessages([]);

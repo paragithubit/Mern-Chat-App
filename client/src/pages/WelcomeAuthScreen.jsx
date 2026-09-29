@@ -3,6 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useChatState } from "../context/useChatState";
 
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com/api";
+
 const WelcomeAuthScreen = () => {
   const [step, setStep] = useState(0); // 0: Landing, 1: Mobile, 2: OTP, 3: Password/Auth, 4: Google Account Picker, 5: Forgot Password
   const [isRegisterMode, setIsRegisterMode] = useState(false);
@@ -36,7 +39,7 @@ const WelcomeAuthScreen = () => {
 
     setLoading(true);
     try {
-      const { data } = await axios.post("https://chat-app-backend-1-ib4u.onrender.com/api/otp/send-otp", {
+      const { data } = await axios.post(`${API_URL}/otp/send-otp`, {
         phone: cleanPhone,
         phoneNumber: cleanPhone,
       });
@@ -72,7 +75,7 @@ const WelcomeAuthScreen = () => {
 
     setLoading(true);
     try {
-      const { data } = await axios.post("https://chat-app-backend-1-ib4u.onrender.com/api/otp/verify-otp", {
+      const { data } = await axios.post(`${API_URL}/otp/verify-otp`, {
         phone: phone,
         phoneNumber: phone,
         otp: cleanOtp,
@@ -120,7 +123,7 @@ const WelcomeAuthScreen = () => {
     setLoading(true);
 
     try {
-      const { data } = await axios.get("https://chat-app-backend-1-ib4u.onrender.com/api/auth/google-accounts");
+      const { data } = await axios.get(`${API_URL}/auth/google-accounts`);
       setGoogleAccounts(data || []);
       setStep(4);
     } catch (err) {
@@ -174,7 +177,7 @@ const WelcomeAuthScreen = () => {
           }
         : { email: cleanEmail, password: cleanPassword };
 
-      const { data } = await axios.post(`https://chat-app-backend-1-ib4u.onrender.com/api/auth/${endpoint}`, payload);
+      const { data } = await axios.post(`${API_URL}/auth/${endpoint}`, payload);
 
       // Tab isolation: write strictly to sessionStorage
       sessionStorage.setItem("userInfo", JSON.stringify(data));
@@ -203,7 +206,7 @@ const WelcomeAuthScreen = () => {
 
     setLoading(true);
     try {
-      const { data } = await axios.post("https://chat-app-backend-1-ib4u.onrender.com/api/auth/forgot-password", {
+      const { data } = await axios.post(`${API_URL}/auth/forgot-password`, {
         email: cleanEmail,
       });
       setSuccessMsg(data.message || "Password reset link sent! Check your email inbox.");

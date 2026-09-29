@@ -5,6 +5,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useChatState } from "../context/useChatState";
 import { generateKeyPair, exportKey } from "../utils/crypto";
 
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com/api";
+
 const AuthPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -41,7 +44,7 @@ const AuthPage = () => {
           headers: { Authorization: `Bearer ${token}` },
         };
         await axios.put(
-          "https://chat-app-backend-1-ib4u.onrender.com/api/user/update-public-key",
+          `${API_URL}/user/update-public-key`,
           { publicKey: exportedPub },
           config
         );
@@ -65,7 +68,7 @@ const AuthPage = () => {
     setLoading(true);
 
     try {
-      await axios.post("https://chat-app-backend-1-ib4u.onrender.com/api/auth/send-otp", {
+      await axios.post(`${API_URL}/auth/send-otp`, {
         phone: cleanPhone,
       });
       
@@ -98,7 +101,7 @@ const AuthPage = () => {
       const cleanPhone = phone.trim().replace(/\D/g, "").slice(-10);
 
       const { data } = await axios.post(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/auth/verify-otp",
+        `${API_URL}/auth/verify-otp`,
         {
           phone: cleanPhone,
           otp: cleanOtp,

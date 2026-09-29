@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com/api";
+
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -27,7 +30,7 @@ const ForgotPasswordPage = () => {
       };
 
       const { data } = await axios.post(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/auth/forgot-password",
+        `${API_URL}/auth/forgot-password`,
         { email },
         config
       );

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useChatState } from "../context/useChatState";
 
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com/api";
+
 const GroupChatModal = ({ isOpen, onClose }) => {
   const [groupChatName, setGroupChatName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -28,7 +31,7 @@ const GroupChatModal = ({ isOpen, onClose }) => {
         headers: { Authorization: `Bearer ${user.token}` },
       };
       const { data } = await axios.get(
-        `https://chat-app-backend-1-ib4u.onrender.com/api/contacts?search=${encodeURIComponent(query.trim())}`,
+        `${API_URL}/contacts?search=${encodeURIComponent(query.trim())}`,
         config
       );
       setSearchResult(data);
@@ -76,7 +79,7 @@ const GroupChatModal = ({ isOpen, onClose }) => {
       };
 
       const { data } = await axios.post(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/chat/group",
+        `${API_URL}/chat/group`,
         {
           name: groupChatName.trim(),
           users: JSON.stringify(selectedUsers.map((u) => u._id)),

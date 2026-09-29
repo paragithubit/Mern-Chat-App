@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useChatState } from "../context/useChatState";
 
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com/api";
+
 const AddContactModal = ({ isOpen, onClose, onContactAdded }) => {
   const [savedName, setSavedName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -49,7 +52,7 @@ const AddContactModal = ({ isOpen, onClose, onContactAdded }) => {
       };
 
       await axios.post(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/contacts/add",
+        `${API_URL}/contacts/add`,
         {
           savedName: cleanName,
           phoneNumber: cleanPhone,

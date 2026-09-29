@@ -3,6 +3,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 // import { useChatState } from "../context/ChatProvider";
 import { useChatState } from "../context/useChatState";
+import { generateKeyPair, exportKey } from "../utils/crypto";
 import MyChats from "../components/MyChats";
 import ChatBox from "../components/ChatBox";
 import AIChatBox from "../components/AIChatBox";
@@ -11,6 +12,9 @@ import CallsList from "../components/CallsList";
 import CallModal from "../components/CallModal";
 import StatusViewerModal from "../components/StatusViewerModal";
 import ChatInfoDrawer from "../components/ChatInfoDrawer";
+
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com/api";
 
 const ChatPage = () => {
   const [fetchAgain, setFetchAgain] = useState(false);
@@ -37,7 +41,7 @@ const ChatPage = () => {
     if (!user?.token) return;
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.get("https://chat-app-backend-1-ib4u.onrender.com/api/status", config);
+      const { data } = await axios.get(`${API_URL}/status`, config);
       setStatuses(data);
     } catch (error) {
       console.error("Failed to fetch statuses", error);
@@ -74,7 +78,7 @@ const ChatPage = () => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get("https://chat-app-backend-1-ib4u.onrender.com/api/ai/room", config);
+      const { data } = await axios.get(`${API_URL}/ai/room`, config);
       
       if (!chats.find((c) => c._id === data._id)) {
         setChats([data, ...chats]);

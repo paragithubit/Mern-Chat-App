@@ -6,6 +6,9 @@ import { useChatState } from "../context/useChatState";
 const CLOUDINARY_CLOUD_NAME = "qhyxgx1b";
 const CLOUDINARY_PRESET = "chat_upload";
 
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com/api";
+
 const UpdateGroupChatModal = ({ isOpen, onClose, fetchMessages }) => {
   const [groupChatName, setGroupChatName] = useState("");
   const [search, setSearch] = useState("");
@@ -69,7 +72,7 @@ const UpdateGroupChatModal = ({ isOpen, onClose, fetchMessages }) => {
       };
 
       const { data } = await axios.put(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/chat/grouppicture",
+        `${API_URL}/chat/grouppicture`,
         {
           chatId: selectedChat._id,
           groupImage: uploadedUrl,
@@ -102,7 +105,7 @@ const UpdateGroupChatModal = ({ isOpen, onClose, fetchMessages }) => {
       };
 
       const { data } = await axios.put(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/chat/rename",
+        `${API_URL}/chat/rename`,
         {
           chatId: selectedChat._id,
           chatName: groupChatName,
@@ -135,7 +138,7 @@ const UpdateGroupChatModal = ({ isOpen, onClose, fetchMessages }) => {
         headers: { Authorization: `Bearer ${user.token}` },
       };
       const { data } = await axios.get(
-        `https://chat-app-backend-1-ib4u.onrender.com/api/user?search=${query}`,
+        `${API_URL}/user?search=${query}`,
         config
       );
       setSearchResult(data);
@@ -168,7 +171,7 @@ const UpdateGroupChatModal = ({ isOpen, onClose, fetchMessages }) => {
       };
 
       const { data } = await axios.put(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/chat/groupadd",
+        `${API_URL}/chat/groupadd`,
         {
           chatId: selectedChat._id,
           userId: userToAdd._id,
@@ -205,7 +208,7 @@ const UpdateGroupChatModal = ({ isOpen, onClose, fetchMessages }) => {
       };
 
       const { data } = await axios.put(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/chat/groupremove",
+        `${API_URL}/chat/groupremove`,
         {
           chatId: selectedChat._id,
           userId: userToRemove._id,
@@ -248,7 +251,7 @@ const UpdateGroupChatModal = ({ isOpen, onClose, fetchMessages }) => {
       };
 
       const { data } = await axios.put(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/chat/groupadmin",
+        `${API_URL}/chat/groupadmin`,
         {
           chatId: selectedChat._id,
           targetUserId: targetUser._id,

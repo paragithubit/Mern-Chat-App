@@ -6,6 +6,9 @@ import StatusViewerModal from "./StatusViewerModal";
 const CLOUDINARY_CLOUD_NAME = "qhyxgx1b";
 const CLOUDINARY_PRESET = "chat_upload";
 
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com/api";
+
 const StatusList = () => {
   const [statuses, setStatuses] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -27,7 +30,7 @@ const StatusList = () => {
   const fetchStatuses = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.get("https://chat-app-backend-1-ib4u.onrender.com/api/status", config);
+      const { data } = await axios.get(`${API_URL}/status`, config);
       setStatuses(data);
     } catch (error) {
       console.error("Failed to fetch statuses", error);
@@ -55,7 +58,7 @@ const StatusList = () => {
 
       const config = { headers: { Authorization: `Bearer ${user.token}` } };
       await axios.post(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/status",
+        `${API_URL}/status`,
         { mediaUrl: res.data.secure_url, mediaType: "image" },
         config
       );
@@ -100,7 +103,7 @@ const StatusList = () => {
         updated[item._id] = true;
         try {
           const config = { headers: { Authorization: `Bearer ${user.token}` } };
-          await axios.put(`https://chat-app-backend-1-ib4u.onrender.com/api/status/${item._id}/view`, {}, config);
+          await axios.put(`${API_URL}/status/${item._id}/view`, {}, config);
         } catch (err) {
           console.error("Failed to sync view status on server", err);
         }

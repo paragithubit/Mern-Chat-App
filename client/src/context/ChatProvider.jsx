@@ -9,7 +9,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import io from "socket.io-client";
 
 export const ChatContext = createContext();
-const ENDPOINT = "https://chat-app-backend-1-ib4u.onrender.com";
+
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com";
 
 export const ChatProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -109,7 +111,7 @@ export const ChatProvider = ({ children }) => {
       return;
     }
 
-    const newSocket = io(ENDPOINT, {
+    const newSocket = io(API_URL, {
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,

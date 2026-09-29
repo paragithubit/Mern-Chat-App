@@ -6,6 +6,9 @@ import { useChatState } from "../context/useChatState";
 const CLOUDINARY_CLOUD_NAME = "qhyxgx1b";
 const CLOUDINARY_PRESET = "chat_upload";
 
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com/api";
+
 const ChatInfoDrawer = ({
   isOpen,
   onClose,
@@ -92,7 +95,7 @@ const ChatInfoDrawer = ({
       };
 
       const { data } = await axios.put(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/chat/grouppicture",
+        `${API_URL}/chat/grouppicture`,
         {
           chatId: selectedChat._id,
           groupImage: uploadedUrl,
@@ -123,7 +126,7 @@ const ChatInfoDrawer = ({
       };
 
       const { data } = await axios.put(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/chat/disappearing",
+        `${API_URL}/chat/disappearing`,
         { chatId: selectedChat._id, duration: durationInSeconds },
         config
       );

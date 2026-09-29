@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-// import { useChatState } from "../context/ChatProvider";
 import { useChatState } from "../context/useChatState";
+
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com/api";
 
 const MediaDrawer = ({ isOpen, onClose, messages = [] }) => {
   const [activeTab, setActiveTab] = useState("media"); // "media" | "docs" | "audio"
@@ -21,7 +23,7 @@ const MediaDrawer = ({ isOpen, onClose, messages = [] }) => {
   const handleDirectDownload = (fileUrl, fileName) => {
     if (!fileUrl) return;
 
-    const proxyDownloadUrl = `https://chat-app-backend-1-ib4u.onrender.com/api/message/download?url=${encodeURIComponent(
+    const proxyDownloadUrl = `${API_URL}/message/download?url=${encodeURIComponent(
       fileUrl
     )}&filename=${encodeURIComponent(fileName || "document.pdf")}`;
 

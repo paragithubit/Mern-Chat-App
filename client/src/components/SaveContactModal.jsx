@@ -3,6 +3,9 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useChatState } from "../context/useChatState";
 
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com/api";
+
 const SaveContactModal = ({ isOpen, onClose, contactData }) => {
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(true);
@@ -27,7 +30,7 @@ const SaveContactModal = ({ isOpen, onClose, contactData }) => {
           headers: { Authorization: `Bearer ${user.token}` },
         };
         // Fetch user's current saved contacts list
-        const { data } = await axios.get("https://chat-app-backend-1-ib4u.onrender.com/api/contacts", config);
+        const { data } = await axios.get(`${API_URL}/contacts`, config);
 
         // Check if the phone number already exists in saved contacts (comparing last 10 digits to be safe)
         const last10Target = cleanPhone.slice(-10);
@@ -65,7 +68,7 @@ const SaveContactModal = ({ isOpen, onClose, contactData }) => {
       };
 
       await axios.post(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/contacts/add",
+        `${API_URL}/contacts/add`,
         {
           savedName: contactName.trim(),
           phoneNumber: cleanPhone,

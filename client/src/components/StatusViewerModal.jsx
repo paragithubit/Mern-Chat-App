@@ -3,6 +3,9 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useChatState } from "../context/useChatState";
 
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com/api";
+
 const QUICK_STATUS_EMOJIS = ["😂", "😮", "😍", "😢", "🙏", "🔥", "❤️", "👍"];
 
 const StatusViewerModal = ({ isOpen, onClose, statusGroup }) => {
@@ -31,7 +34,7 @@ const StatusViewerModal = ({ isOpen, onClose, statusGroup }) => {
     const markViewed = async () => {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        await axios.put(`https://chat-app-backend-1-ib4u.onrender.com/api/status/${currentStatus._id}/view`, {}, config);
+        await axios.put(`${API_URL}/status/${currentStatus._id}/view`, {}, config);
       } catch (err) {
         console.error("Failed to mark status as viewed", err);
       }
@@ -71,7 +74,7 @@ const StatusViewerModal = ({ isOpen, onClose, statusGroup }) => {
       // 1. Access or create direct chat with status author
       const authorId = statusGroup.user?._id || statusGroup.user;
       const { data: chatData } = await axios.post(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/chat",
+        `${API_URL}/chat`,
         { userId: authorId },
         config
       );
@@ -83,7 +86,7 @@ const StatusViewerModal = ({ isOpen, onClose, statusGroup }) => {
       };
 
       const { data: messageData } = await axios.post(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/message",
+        `${API_URL}/message`,
         payload,
         config
       );

@@ -3,6 +3,9 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useChatState } from "../context/useChatState";
 
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com/api";
+
 const ForwardMessageModal = ({ isOpen, onClose, onForward }) => {
   const { chats, user, theme, setSelectedChat } = useChatState();
   const [selectedTargetIds, setSelectedTargetIds] = useState([]); // Array of selected target identifiers
@@ -30,7 +33,7 @@ const ForwardMessageModal = ({ isOpen, onClose, onForward }) => {
         headers: { Authorization: `Bearer ${user.token}` },
       };
       const { data } = await axios.get(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/users/directory",
+        `${API_URL}/users/directory`,
         config
       );
       setSavedContactsList(data);
@@ -93,7 +96,7 @@ const ForwardMessageModal = ({ isOpen, onClose, onForward }) => {
           } else {
             try {
               const { data: newSelfChat } = await axios.post(
-                "https://chat-app-backend-1-ib4u.onrender.com/api/chat",
+                `${API_URL}/chat`,
                 { userId: currentUserId },
                 config
               );
@@ -109,7 +112,7 @@ const ForwardMessageModal = ({ isOpen, onClose, onForward }) => {
           const userId = targetKey.replace("user_", "");
           try {
             const { data: newChat } = await axios.post(
-              "https://chat-app-backend-1-ib4u.onrender.com/api/chat",
+              `${API_URL}/chat`,
               { userId },
               config
             );

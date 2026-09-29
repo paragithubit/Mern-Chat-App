@@ -7,6 +7,9 @@ import { useChatState } from "../context/useChatState";
 const CLOUDINARY_CLOUD_NAME = "qhyxgx1b";
 const CLOUDINARY_PRESET = "chat_upload";
 
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com/api";
+
 const ProfileModal = ({ isOpen, onClose }) => {
   const { user, setUser, theme } = useChatState();
   const isDark = theme === "dark";
@@ -58,7 +61,7 @@ const ProfileModal = ({ isOpen, onClose }) => {
       };
 
       const { data } = await axios.put(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/auth/profile",
+        `${API_URL}/auth/profile`,
         {
           name,
           bio,

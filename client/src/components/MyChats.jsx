@@ -6,6 +6,9 @@ import { useChatState } from "../context/useChatState";
 import GroupChatModal from "./GroupChatModal";
 import AddContactModal from "./AddContactModal";
 
+// Automatically switches between local development and your live Render backend
+const API_URL = import.meta.env.VITE_API_URL || "https://chat-app-backend-1-ib4u.onrender.com/api";
+
 const MyChats = ({
   fetchAgain,
   activeTab,
@@ -67,7 +70,7 @@ const MyChats = ({
       };
 
       const { data } = await axios.get(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/contacts",
+        `${API_URL}/contacts`,
         config
       );
 
@@ -278,7 +281,7 @@ const MyChats = ({
       };
 
       const { data } = await axios.get(
-        "https://chat-app-backend-1-ib4u.onrender.com/api/chat",
+        `${API_URL}/chat`,
         config
       );
 
@@ -431,7 +434,7 @@ const MyChats = ({
                   };
 
                   await axios.delete(
-                    `https://chat-app-backend-1-ib4u.onrender.com/api/chat/clear/${chatId}`,
+                    `${API_URL}/chat/clear/${chatId}`,
                     config
                   );
 
@@ -522,7 +525,7 @@ const MyChats = ({
                   };
 
                   await axios.delete(
-                    `https://chat-app-backend-1-ib4u.onrender.com/api/chat/${chatId}`,
+                    `${API_URL}/chat/${chatId}`,
                     config
                   );
 
@@ -613,7 +616,7 @@ const MyChats = ({
 
         const { data } =
           await axios.put(
-            "https://chat-app-backend-1-ib4u.onrender.com/api/auth/profile",
+            `${API_URL}/auth/profile`,
             {
               profilePicture:
                 base64Image,
@@ -679,7 +682,7 @@ const MyChats = ({
 
       const { data } =
         await axios.get(
-          `https://chat-app-backend-1-ib4u.onrender.com/api/contacts?search=${encodeURIComponent(
+          `${API_URL}/contacts?search=${encodeURIComponent(
             query.trim()
           )}`,
           config
@@ -739,7 +742,7 @@ const MyChats = ({
 
       const { data } =
         await axios.post(
-          "https://chat-app-backend-1-ib4u.onrender.com/api/chat",
+          `${API_URL}/chat`,
           { userId },
           config
         );
@@ -820,7 +823,7 @@ const MyChats = ({
         };
 
         await axios.put(
-          `https://chat-app-backend-1-ib4u.onrender.com/api/message/read/${chat._id}`,
+          `${API_URL}/message/read/${chat._id}`,
           {},
           config
         );
