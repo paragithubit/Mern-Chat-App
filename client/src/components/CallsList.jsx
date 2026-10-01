@@ -396,14 +396,14 @@ const CallsList = () => {
                     {new Date(call.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                   </span>
 
-                  <button
+{/*                   <button
                     type="button"
                     onClick={() => handleCallback(call, call.callType)}
                     className="p-2.5 bg-teal-500/10 hover:bg-teal-500 text-teal-400 hover:text-white rounded-xl transition-all text-xs cursor-pointer shadow-xs transform active:scale-95 flex items-center justify-center"
                     title="Call back"
                   >
                     {call.callType === "video" ? "📹" : "📞"}
-                  </button>
+                  </button> */}
 
                   <button
                     type="button"
