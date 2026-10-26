@@ -3,12 +3,14 @@
  * using the browser-native Web Crypto API (window.crypto.subtle).
  */
 
-// Safe helper to convert ArrayBuffer/Uint8Array to Base64 (avoids stack overflow on large messages)
+// Optimized chunked helper to convert ArrayBuffer/Uint8Array to Base64 (eliminates UI lag and stack overflow)
 function arrayBufferToBase64(buffer) {
   const bytes = new Uint8Array(buffer);
+  const chunkSize = 0x8000; // 32KB chunks
   let binary = "";
-  for (let i = 0; i < bytes.byteLength; i++) {
-    binary += String.fromCharCode(bytes[i]);
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    const chunk = bytes.subarray(i, i + chunkSize);
+    binary += String.fromCharCode.apply(null, chunk);
   }
   return btoa(binary);
 }

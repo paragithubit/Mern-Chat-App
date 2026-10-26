@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useChatState } from "../context/useChatState";
@@ -18,12 +18,27 @@ const WelcomeAuthScreen = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [longLoading, setLongLoading] = useState(false); // Handles Render cold-start perception
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
   const navigate = useNavigate();
   const chatContext = useChatState() || {};
   const setUser = chatContext.setUser;
+
+  // Cold-start timer helper for Render backend spinning down
+  useEffect(() => {
+    let timer;
+    if (loading) {
+      setLongLoading(false);
+      timer = setTimeout(() => {
+        setLongLoading(true);
+      }, 3000);
+    } else {
+      setLongLoading(false);
+    }
+    return () => clearTimeout(timer);
+  }, [loading]);
 
   // 1. Send OTP & Automatically Populate Verification Code Input
   const handleSendOtp = async (e) => {
@@ -42,7 +57,7 @@ const WelcomeAuthScreen = () => {
       const { data } = await axios.post(`${API_URL}/otp/send-otp`, {
         phone: cleanPhone,
         phoneNumber: cleanPhone,
-      });
+      }, { timeout: 15000 });
 
       setPhone(cleanPhone);
       setStep(2);
@@ -56,7 +71,7 @@ const WelcomeAuthScreen = () => {
       }
     } catch (err) {
       console.error("Send OTP error:", err);
-      setError(err.response?.data?.message || "Failed to send OTP code. Try again.");
+      setError(err.response?.data?.message || "Failed to send OTP code. Server may be starting up, please try again.");
     } finally {
       setLoading(false);
     }
@@ -81,7 +96,7 @@ const WelcomeAuthScreen = () => {
         otp: cleanOtp,
         enteredOtp: cleanOtp,
         name: name.trim(),
-      });
+      }, { timeout: 15000 });
 
       const userData = data.user
         ? {
@@ -123,7 +138,7 @@ const WelcomeAuthScreen = () => {
     setLoading(true);
 
     try {
-      const { data } = await axios.get(`${API_URL}/auth/google-accounts`);
+      const { data } = await axios.get(`${API_URL}/auth/google-accounts`, { timeout: 15000 });
       setGoogleAccounts(data || []);
       setStep(4);
     } catch (err) {
@@ -177,7 +192,7 @@ const WelcomeAuthScreen = () => {
           }
         : { email: cleanEmail, password: cleanPassword };
 
-      const { data } = await axios.post(`${API_URL}/auth/${endpoint}`, payload);
+      const { data } = await axios.post(`${API_URL}/auth/${endpoint}`, payload, { timeout: 15000 });
 
       // Tab isolation: write strictly to sessionStorage
       sessionStorage.setItem("userInfo", JSON.stringify(data));
@@ -208,7 +223,7 @@ const WelcomeAuthScreen = () => {
     try {
       const { data } = await axios.post(`${API_URL}/auth/forgot-password`, {
         email: cleanEmail,
-      });
+      }, { timeout: 15000 });
       setSuccessMsg(data.message || "Password reset link sent! Check your email inbox.");
     } catch (err) {
       console.error("Forgot password error:", err);
@@ -264,6 +279,12 @@ const WelcomeAuthScreen = () => {
           </div>
         )}
 
+        {longLoading && loading && (
+          <div className="mb-4 text-[11px] text-teal-400 font-medium animate-pulse">
+            Server is waking up from sleep mode, please hold on...
+          </div>
+        )}
+
         {/* STEP 0: LANDING */}
         {step === 0 && (
           <div className="space-y-3.5">
@@ -283,7 +304,7 @@ const WelcomeAuthScreen = () => {
             <button
               onClick={() => handleSocialClick("Google")}
               disabled={loading}
-              className="w-full py-3.5 bg-slate-900/90 hover:bg-slate-800 border border-slate-700/60 hover:border-slate-600 transition-all rounded-2xl text-slate-200 font-bold text-xs flex items-center justify-center gap-3 cursor-pointer shadow-sm active:scale-[0.98]"
+              className="w-full py-3.5 bg-slate-900/90 hover:bg-slate-800 border border-slate-700/60 hover:border-slate-600 transition-all rounded-2xl text-slate-200 font-bold text-xs flex items-center justify-center gap-3 cursor-pointer shadow-sm active:scale-[0.98] disabled:opacity-50"
             >
               <span className="text-sm">🌐</span> Google Account
             </button>
@@ -291,7 +312,7 @@ const WelcomeAuthScreen = () => {
             <button
               onClick={() => handleSocialClick("Apple ID")}
               disabled={loading}
-              className="w-full py-3.5 bg-slate-900/90 hover:bg-slate-800 border border-slate-700/60 hover:border-slate-600 transition-all rounded-2xl text-slate-200 font-bold text-xs flex items-center justify-center gap-3 cursor-pointer shadow-sm active:scale-[0.98]"
+              className="w-full py-3.5 bg-slate-900/90 hover:bg-slate-800 border border-slate-700/60 hover:border-slate-600 transition-all rounded-2xl text-slate-200 font-bold text-xs flex items-center justify-center gap-3 cursor-pointer shadow-sm active:scale-[0.98] disabled:opacity-50"
             >
               <span className="text-sm">🍎</span> Apple ID
             </button>
